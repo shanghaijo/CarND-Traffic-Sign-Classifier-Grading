@@ -24,6 +24,9 @@ r* Summarize the results with a written report
 [image3]: ./nouturn.png "Traffic Sign 3"
 [image4]: ./stop.png "Traffic Sign 4"
 [image5]: ./danger_left.png "Traffic Sign 5"
+[image6]: ./real_stop1.png "Real Stop Sign 1"
+[image7]: ./real_stop2.png "Real Stop Sign 2"
+[image8]: ./real_stop3.png "Real Stop Sign 3"
 [image10]: ./b4norm.png "After rotation and offset"
 [image11]: ./afternorm.png "After rotation and offset"
 
@@ -44,16 +47,12 @@ You're reading it! and here is a link to my [project code](https://github.com/sh
 The code for this step is contained in the second code cell of the IPython notebook.  
 
 I used the pandas library to calculate summary statistics of the traffic
-signs data set:
-
+igns data set:
 * The size of training set was 34799 at the beginning
 * The size of test set is 12630 images
 * The shape of a traffic sign image is 32 per 32
 * The number of unique classes/labels in the data set is 43
 
-####2. Include an exploratory visualization of the dataset and identify where the code is in your code file.
-
-I didn't do any visualization of the dataset as it is quite straight forward
 
 ###Design and Test a Model Architecture
 
@@ -64,7 +63,7 @@ The code for this step is contained in the second code cell of the IPython noteb
 As a first step, I changed the images in quite a few steps:
 I first rotated all the images by a random angle of +/-2° and I added these results to the training set.
 I then modified all the images of the training set to offset them randomly by +/-2 pixels and added that to the training set again. I thus ended up with 139,196 images for the training set.
-I planned on changing them to grayscale however, I got an error with the shuffle function and couldn't immediately figure it out.
+I planned on changing them to grayscale however, I got an error with the shuffle function and couldn't timely figure it out.
 
 Here is an example of a traffic sign image after offesting and rotation
 
@@ -89,7 +88,7 @@ My final model consisted of the following layers:
 | Input         		| 32x32x3 RGB image   							| 
 | Convolution 3x3     	| 1x1 stride, Valid padding, outputs 28x28x6 	|
 | RELU					|												|
-e| Max pooling	      	| 2x2 stride,  outputs 14x14x6 				|
+| Max pooling	      	| 2x2 stride,  outputs 14x14x6 				|
 | Convolution 3x3	    | 1x1 stride, Valid padding, outputs 10x10x16					|
 | RELU     |            |
 | Max Pooling         | 2x2 strides  | 5x5x16 |
@@ -99,7 +98,7 @@ e| Max pooling	      	| 2x2 stride,  outputs 14x14x6 				|
 |	Fully connected					|	 output 84											|
 |	RELU					|												|
 | Fully connected | output 43 |
-h 
+ 
 
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
@@ -132,11 +131,17 @@ Here are five German traffic signs that I found on the web:
 ![alt text][image1] ![alt text][image2] ![alt text][image3] 
 ![alt text][image4] ![alt text][image5]
 
-I was afraid the images might be dificult to be recognized because they are actually very clear and very big taking the whole frame. I was afraid that would influence quite badly
+I firstly used images from road rules manuals as can be seen on the images over there and I got an accuracy of 100%. I did it this way to check if, as trained on a "real life" pictures, it would be able to recognize something "cleaner".
+I also tried with more real images and I got a pass each time:
+![alt text][image6] ![alt text][image7]
+
+I tried with something more challenging:
+![alt text][image8]
+and there I got a wrong prediction
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
-The code for making predictions on my final model is located in the twelveth cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 12th cell of the Ipython notebook.
 
 Here are the results of the prediction:
 
@@ -150,21 +155,23 @@ Here are the results of the prediction:
 
 
 The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 0.946.
-At the beginning, I had an accuracy of only 4 over 5 and the speed limit was always the one not working. I actually found out that my normalization was wrong and was creating dissues.
+At the beginning, I had an accuracy of only 4 over 5 and the speed limit was always the one not working. I actually found out that my normalization was wrong and was creating issues.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The code for making predictions on my final model is located in the last cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+I actually have very high probabilities, for the images I used, I am between 0.97 and 1.0! I have thus a very opinionated network. I think that the fact that I am going through 200 epochs makes it extremely sure. However, this is also true when the prediction is wrong. With the image of the stop being only partial on the image, i got a 1. probability on the wrong prediction!! 
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+Next steps and conclusion:
+I unfortunately spent a significant amount of time figuring out the images pre-processing since this is something I never came across before I actually understood that tf had some libraries for that. I actually started out with the hyperparameters and got completely stuck at 91% accuracy, I went at that stage to gray scale but didn't get any improvements so I dropped this idea.
+I experienced also with dropouts since I wanted to have a more robust network however I ended up with lower accuracy on the validation set. So it does what it is supposed to do, prevent overfitting but when there's is none, it lowers accuracy, at least in this case.
+The major breakout in the accuracy level was by adding modified images to the original, add L2 regularization and go over 150 epochs.
+I know understand that I went through a lot of dead ends during the course of this project and I am not through with it but I will need more time to tweak it. That would be:
+- Have a better pre-processing of the images, this one is too basic, add grayscale, zoom and bigger offsets
+- Limit the numbers of epochs (50 max) and still get a good accuracy by working on the hyper parameters. I think that would help prevent a very opinionated network where predictions are very binary
+- The structure of the network looks ok, it is a Lenet after all, I would at most change some layers sizes but not much
+- Choose better images from the web to find out how my network reacts to real life challenges.
 
+In conclusion, this network is far from showing a great result, however, it provided me with a lot of lessons learned that I will be able to apply for the future and I will keep upgrade it during the rest of the course to see where it leads me.
 
-For the second image ... 
