@@ -26,7 +26,7 @@ r* Summarize the results with a written report
 [image5]: ./danger_left.png "Traffic Sign 5"
 [image6]: ./real_stop1.png "Real Stop Sign 1"
 [image7]: ./real_stop2.png "Real Stop Sign 2"
-[image8]: ./real_stop3.png "Real Stop Sign 3"
+[image8]: ./real_stop4.png "Real Stop Sign 3"
 [image10]: ./b4norm.png "After rotation and offset"
 [image11]: ./afternorm.png "After rotation and offset"
 
