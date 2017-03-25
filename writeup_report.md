@@ -29,6 +29,7 @@ r* Summarize the results with a written report
 [image8]: ./real_stop4.png "Real Stop Sign 3"
 [image10]: ./b4norm.png "After rotation and offset"
 [image11]: ./afternorm.png "After rotation and offset"
+[image12]: ./real_601.png "Real 60 Sign"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -113,8 +114,9 @@ I trained the model through 200 epochs, it is quite a lot especially since I hav
 The code for calculating the accuracy of the model is located in the eleventh cell of the Ipython notebook.
 
 My final model results were:
-* validation set accuracy of 0.955 
-* test set accuracy of 0.941
+* validation training accuracy of 0.996
+* validation set accuracy of 0.968 
+* test set accuracy of 0.948
 
 
 
@@ -131,13 +133,12 @@ Here are five German traffic signs that I found on the web:
 ![alt text][image1] ![alt text][image2] ![alt text][image3] 
 ![alt text][image4] ![alt text][image5]
 
-I firstly used images from road rules manuals as can be seen on the images over there and I got an accuracy of 100%. I did it this way to check if, as trained on a "real life" pictures, it would be able to recognize something "cleaner".
-I also tried with more real images and I got a pass each time:
+I used pictures from very clear images from learning boards. Yet I only got an accuracy of 0.8. It is actually quite strange because I used to have 100% accuracy with the same network and the same number of epochs. However, I also found that training several times on the same jupyter notebook got different results. This time, I started fresh and got this result. I guess the kernel was not fully clean each time I run it previously.
+I also tried images from the web for real road ones and got a right hit for the stop sign each time.
 ![alt text][image6] ![alt text][image7]
-
-I tried with something more challenging:
-![alt text][image8]
-and there I got a wrong prediction
+I tried with a real 60km/h Sign:
+![alt_text][image12]
+and got the same mistake as with the previous ones, it was predicted as 50km/h
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -154,14 +155,15 @@ Here are the results of the prediction:
 | Dangerous left turn			| Dangerous left turn      							|
 
 
-The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 0.946.
-At the beginning, I had an accuracy of only 4 over 5 and the speed limit was always the one not working. I actually found out that my normalization was wrong and was creating issues.
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 0.948.
+The only one that is not recognized correctly is the 60km/h speed limit, it is actually predicted as being 50km/h. the difference between 5 and 6 is indeed not easy in such a low resolution pictures.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 The code for making predictions on my final model is located in the last cell of the Ipython notebook.
 
-I actually have very high probabilities, for the images I used, I am between 0.97 and 1.0! I have thus a very opinionated network. I think that the fact that I am going through 200 epochs makes it extremely sure. However, this is also true when the prediction is wrong. With the image of the stop being only partial on the image, i got a 1. probability on the wrong prediction!! 
+interestingly, I got almost a 50/50 prediction on the wrong sign of 60km/h and 50km/h. 50 was 52.7% while 60 was at 47.2%. The algorithm was a little split about both. I guess it comes from the fact I didn't use grayscale for the images which would have enhanced the differences between those.
+All the other predictions are basically 100%, this probably comes from the high number of epochs.
 
 Next steps and conclusion:
 I unfortunately spent a significant amount of time figuring out the images pre-processing since this is something I never came across before I actually understood that tf had some libraries for that. I actually started out with the hyperparameters and got completely stuck at 91% accuracy, I went at that stage to gray scale but didn't get any improvements so I dropped this idea.
